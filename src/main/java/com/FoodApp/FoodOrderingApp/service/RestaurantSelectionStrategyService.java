@@ -6,6 +6,7 @@ import com.FoodApp.FoodOrderingApp.entities.Menu;
 import com.FoodApp.FoodOrderingApp.entities.Restaurant;
 import com.FoodApp.FoodOrderingApp.service.strategy.RestaurantStrategyName;
 import com.FoodApp.FoodOrderingApp.service.strategy.RestaurantStrategy;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Service
+@Transactional
 public class RestaurantSelectionStrategyService {
     @Autowired
     private Map<String, RestaurantStrategy> restaurantStrategy;

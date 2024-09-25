@@ -32,7 +32,7 @@ public class Order {
     private OrderStatus status;
 
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Restaurant restaurantSelected;
 
     private int EstimatedDeliveryTime;

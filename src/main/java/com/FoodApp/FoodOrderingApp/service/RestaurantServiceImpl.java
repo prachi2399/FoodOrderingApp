@@ -10,6 +10,8 @@ import com.FoodApp.FoodOrderingApp.entities.Restaurant;
 import com.FoodApp.FoodOrderingApp.repository.MenuItemsRepository;
 import com.FoodApp.FoodOrderingApp.repository.MenuRepository;
 import com.FoodApp.FoodOrderingApp.repository.RestaurantRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,9 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Autowired
     MenuItemsRepository menuItemsRepository;
 
+    @Autowired
+    EntityManager entityManager;
+
     @Override
     public Restaurant createRestaurant(Restaurant restaurantInput) {
         Menu menu = menuRepository.save(Menu.builder().build());
@@ -47,8 +52,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @Transactional
     public Restaurant getRestaurantById(Long id) throws CustomException {
         Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
+        restaurantRepository.save(restaurant);
         if(Objects.isNull(restaurant)){
             throw new CustomException("No Restaurant found with ID "+ id);
         }
@@ -97,8 +104,10 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public void updateRestaurantCapacity(Long restaurantId, int currentCapacity) throws CustomException {
+
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        if(Objects.isNull(restaurant)){
+
+        if(Objects.isNull(restaurant) && !entityManager.contains(restaurant)){
             throw new CustomException("No Restaurant found with given id" + restaurantId);
         }
         restaurant.setCurrentCapacity(currentCapacity);

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
+import jakarta.transaction.Transactional;
 import lombok.*;
 
 import java.util.Collection;
@@ -22,6 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Table(name = "restaurant")
 //@TypeDef(
 //typeClass = JsonBinaryType.class)
+@Transactional
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Restaurant {
 
@@ -43,7 +45,7 @@ public class Restaurant {
 
     private int currentCapacity;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Menu menu;
 
 //    private boolean isServiceAble=true;

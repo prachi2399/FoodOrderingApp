@@ -10,10 +10,12 @@ import com.FoodApp.FoodOrderingApp.entities.Order;
 import com.FoodApp.FoodOrderingApp.entities.Restaurant;
 import com.FoodApp.FoodOrderingApp.repository.MenuItemsRepository;
 import com.FoodApp.FoodOrderingApp.repository.OrderRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -39,14 +41,22 @@ public class OrderServiceImpl implements OrderService{
     @Autowired
     private MenuItemsRepository menuItemsRepository;
 
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private static final String TOPIC = "orders";
+
     private final BlockingQueue<OrderDetails> orderQueue = new LinkedBlockingQueue<>();
     private final ConcurrentHashMap<Long, ReentrantLock> restaurantLocks = new ConcurrentHashMap<>();
     private ExecutorService executorService;
 
     @PostConstruct
     public void init() {
-        executorService = Executors.newSingleThreadExecutor();
-        executorService.submit(this::processOrders);
+//        executorService = Executors.newSingleThreadExecutor();
+//        executorService.submit(this::processOrders);
     }
 
     @PreDestroy
@@ -56,7 +66,7 @@ public class OrderServiceImpl implements OrderService{
 
     public void placeOrder(OrderDetails order){
         log.info("placing order {}", orderQueue.size());
-        orderQueue.offer(order);
+//        orderQueue.offer(order);
 //        processOrder(order);
     }
 
@@ -149,7 +159,10 @@ public class OrderServiceImpl implements OrderService{
             throw new CustomException("No nearby accepting delivery for this order");
         }
         try {
-            placeOrder(orderDetails);
+//            placeOrder(orderDetails);
+            String orderJson = objectMapper.writeValueAsString(orderDetails);
+            kafkaTemplate.send(TOPIC, orderJson);
+            log.info("take Order in kafka");
             return OrderStatus.ACCEPTED.toString();
         } catch (Exception e) {
             throw new CustomException("An unexpected error occurred while placing the order", e);
