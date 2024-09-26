@@ -61,15 +61,6 @@ public class RestaurantOrderServiceImpl {
         String orderJson= objectMapper.writeValueAsString(orderStatusDTO);
         kafkaTemplate.send(TOPIC, orderJson);
 
-//        Order order = orderRepository.findById(orderId).orElse(null);
-//        if(Objects.isNull(order)){
-//            standardResponse.setMessage("No order present");
-//            standardResponse.setError("No order present");
-//            standardResponse.setSuccess(false);
-//            return standardResponse;
-//        }
-//        order.setStatus(OrderStatus.DISPATCHED);
-//        orderRepository.save(order);
         standardResponse.setMessage("order dispacted successfully");
         standardResponse.setSuccess(true);
         standardResponse.setData(OrderStatus.DISPATCHED.toString());
