@@ -25,15 +25,13 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long ID;
 
-//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Long customerId;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Restaurant restaurantSelected;
+    private Long restaurantId;
 
     private int EstimatedDeliveryTime;
 

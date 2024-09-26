@@ -1,6 +1,7 @@
 package com.FoodApp.FoodOrderingApp.repository;
 
 import com.FoodApp.FoodOrderingApp.entities.Menu;
+import com.FoodApp.FoodOrderingApp.entities.MenuItem;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

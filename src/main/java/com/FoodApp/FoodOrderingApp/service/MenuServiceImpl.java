@@ -5,6 +5,8 @@ import com.FoodApp.FoodOrderingApp.entities.MenuItem;
 import com.FoodApp.FoodOrderingApp.repository.MenuItemsRepository;
 import com.FoodApp.FoodOrderingApp.repository.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,8 +17,8 @@ public class MenuServiceImpl implements MenuService {
     MenuItemsRepository menuItemsRepository;
 
     @Override
-    public List<String> getMenuListForCity(String city) throws CustomException {
-        List<String> menu =  menuItemsRepository.findMenuItemsFromCity(city);
+    public Page<String> getMenuListForCity(String city, int offset, int pageSize) throws CustomException {
+        Page<String> menu =  menuItemsRepository.findMenuItemsFromCity(city, PageRequest.of(offset, pageSize));
 
         if(menu.isEmpty()){
             throw new CustomException("No Restaurants serviceable in your city" + city);

@@ -1,12 +1,7 @@
 package com.FoodApp.FoodOrderingApp.mappers;
 
-import com.FoodApp.FoodOrderingApp.dto.MenuDTO;
 import com.FoodApp.FoodOrderingApp.dto.MenuQuantity;
-import com.FoodApp.FoodOrderingApp.entities.Menu;
 import com.FoodApp.FoodOrderingApp.entities.MenuItem;
-import com.FoodApp.FoodOrderingApp.entities.Restaurant;
-import com.FoodApp.FoodOrderingApp.repository.MenuItemsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.List;

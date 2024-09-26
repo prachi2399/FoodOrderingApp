@@ -10,7 +10,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
 
-        import java.util.HashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 @Configuration

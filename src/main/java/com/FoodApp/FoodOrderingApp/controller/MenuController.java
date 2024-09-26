@@ -4,12 +4,10 @@ import com.FoodApp.FoodOrderingApp.customException.CustomException;
 import com.FoodApp.FoodOrderingApp.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,8 +21,11 @@ public class MenuController {
 
     @GetMapping("/{city}")
 //    @Cacheable(value="menu", key = "#city")
-    public ResponseEntity<List<String>> getMenuFormCity(@PathVariable String city) throws CustomException {
-        return ResponseEntity.ok(menuService.getMenuListForCity(city));
+    public ResponseEntity<Page<String>> getMenuFormCity(
+            @PathVariable String city,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size)  throws CustomException {
+        return ResponseEntity.ok(menuService.getMenuListForCity(city, page, size));
     }
 
 }

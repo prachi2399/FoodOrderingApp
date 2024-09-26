@@ -17,8 +17,10 @@ public interface RestaurantService {
 
     void updateRestaurantMenu(Long restaurantId, MenuDTO menuItem) throws CustomException;
 
-    void deleteRestaurantMenu(Long menuId, String menuName) throws CustomException;
+    void deleteRestaurantMenu(Long restaurantId, String menuName) throws CustomException;
 
-    Boolean isOrderDeliverable(String city, Address Address, List<Menu> menuList) throws CustomException;
     void updateRestaurantCapacity(Long restaurantId, int currentCapacity) throws CustomException;
+
+    void decreaseRestaurantCapacity(Long restaurantId) throws CustomException;
+
 }

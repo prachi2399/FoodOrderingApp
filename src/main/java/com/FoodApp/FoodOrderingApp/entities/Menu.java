@@ -26,22 +26,5 @@ public class Menu{
     private Long id;
 
 
-//    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
-//    private List<MenuItem> menuItems = new ArrayList<>();
-
-    // Getters and setters
-
-//    @Override
-    public void addMenuItem(MenuItem menuItem) {
-//        menuItems.add(menuItem);
-
-//        menuItem.setMenu(this); // Set the parent-child relationship
-    }
-
-//    @Override
-    public void removeMenuItem(MenuItem menuItem) {
-//        menuItems.remove(menuItem);
-//        menuItem.setMenu(null); // Remove the parent-child relationship
-    }
 
 }

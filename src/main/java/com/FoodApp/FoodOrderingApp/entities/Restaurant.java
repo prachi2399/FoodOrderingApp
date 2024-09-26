@@ -21,8 +21,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Table(name = "restaurant")
-//@TypeDef(
-//typeClass = JsonBinaryType.class)
 @Transactional
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Restaurant {
@@ -48,16 +46,5 @@ public class Restaurant {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Menu menu;
 
-//    private boolean isServiceAble=true;
 
-    public void setMenu(Menu menu) {
-        this.menu = menu;
-    }
-    public void addMenuItemToMenu(MenuItem menuItem) {
-        menu.addMenuItem(menuItem);
-    }
-
-    public void removeMenuItemFromMenu(MenuItem menuItem) {
-        menu.removeMenuItem(menuItem);
-    }
 }

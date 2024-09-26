@@ -36,6 +36,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Autowired
     EntityManager entityManager;
 
+
     @Override
     public Restaurant createRestaurant(Restaurant restaurantInput) {
         Menu menu = menuRepository.save(Menu.builder().build());
@@ -75,31 +76,14 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public void deleteRestaurantMenu(Long restId, String menuName) throws CustomException {
+    public void deleteRestaurantMenu(Long restId, String name) throws CustomException {
         Restaurant restaurant = restaurantRepository.findById(restId).orElseThrow(()->new CustomException("No resturant exist with id "+ restId));
-        MenuItem menuItem = menuItemsRepository.findFirstByMenuIdAndName(restaurant.getMenu().getId(), menuName).orElseThrow(()->new CustomException("No menu exist with name "+ menuName));
+        MenuItem menuItem = menuItemsRepository.findFirstByMenuIdAndName(restaurant.getMenu().getId(), name).orElse(null);
+        if(Objects.isNull(menuItem)){
+            throw new CustomException("No menu item found");
+        }
         menuItem.setDeleted(true);
         menuItemsRepository.save(menuItem);
-    }
-    @Override
-    public Boolean isOrderDeliverable(String city, Address Address, List<Menu> menuItems) throws CustomException {
-        List<Restaurant> restaurants = restaurantRepository.findByCity(city);
-
-        // Ensure restaurants and menuItem are not null
-        if (restaurants == null || restaurants.isEmpty()) {
-            throw new CustomException("No restaurants available to deliver in the city" +city);
-        }
-
-        // Filter restaurants offering the menuItem
-//        List<Restaurant> eligibleRestaurants = restaurants.stream()
-//                .filter(restaurant -> restaurant.getMenuItems().containsAll(menuItems))
-//                .collect(Collectors.toList());
-//
-//        // If no eligible restaurants found, throw an exception
-//        if (eligibleRestaurants.isEmpty()) {
-//            throw new CustomException("No restaurants offering the menuItem found.");
-//        }
-        return true;
     }
 
     @Override
@@ -107,10 +91,21 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
 
-        if(Objects.isNull(restaurant) && !entityManager.contains(restaurant)){
+        if(Objects.isNull(restaurant)){
             throw new CustomException("No Restaurant found with given id" + restaurantId);
         }
         restaurant.setCurrentCapacity(currentCapacity);
+        restaurantRepository.save(restaurant);
+    }
+
+    @Override
+    public void decreaseRestaurantCapacity(Long restaurantId) throws CustomException {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+
+        if(Objects.isNull(restaurant)){
+            throw new CustomException("No Restaurant found with given id" + restaurantId);
+        }
+        if(restaurant.getCurrentCapacity()>0) restaurant.setCurrentCapacity(restaurant.getCurrentCapacity()-1);
         restaurantRepository.save(restaurant);
     }
 

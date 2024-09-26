@@ -3,6 +3,7 @@ package com.FoodApp.FoodOrderingApp.controller;
 import com.FoodApp.FoodOrderingApp.customException.CustomException;
 import com.FoodApp.FoodOrderingApp.dto.MenuDTO;
 import com.FoodApp.FoodOrderingApp.dto.MenuItemDTO;
+import com.FoodApp.FoodOrderingApp.dto.StandardResponse;
 import com.FoodApp.FoodOrderingApp.entities.Menu;
 import com.FoodApp.FoodOrderingApp.entities.Restaurant;
 import com.FoodApp.FoodOrderingApp.service.RestaurantService;
@@ -30,7 +31,6 @@ public class RestaurantController {
     public ResponseEntity<Restaurant> getRestaurantById(@PathVariable Long id) throws CustomException {
         Restaurant restaurant = restaurantService.getRestaurantById(id);
         return ResponseEntity.ok(restaurant);
-
     }
 
     @PatchMapping("/{id}/menu/")
@@ -39,11 +39,21 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Menu added successfully");
     }
 
-    @DeleteMapping("/{id}/menu/{name}")
-    public ResponseEntity<String> deleteRestaurantMenu(@PathVariable Long id, @PathVariable String name) throws CustomException {
-        restaurantService.deleteRestaurantMenu(id, name);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Menu deleted successfully");
+    @DeleteMapping("/{id}/menu")
+    public ResponseEntity<StandardResponse<String>> deleteRestaurantMenu(@PathVariable Long id, @RequestParam(name = "name") String name) throws CustomException {
+        StandardResponse response = new StandardResponse<>();
+        try{
+            restaurantService.deleteRestaurantMenu(id, name);
+            response.setSuccess(true);
+            response.setData("Menu deleted successfully");
+        }catch (Exception e){
+            response.setSuccess(false);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        return ResponseEntity.ok(response);
     }
+
+
 
 }
 
